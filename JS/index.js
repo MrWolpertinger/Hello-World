@@ -3,8 +3,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let particleArray = [];
-let adjustX = 12;
-let adjustY = 10;
+let adjustX = 12; //var that needs to scale
+let adjustY = 10; //var that needs to scale
 
 //mouse controle
 let mouse = {
@@ -23,12 +23,16 @@ window.addEventListener('mouseout', function() {
     mouse.y = undefined;
 });
 
+window.addEventListener('resize', function() {
+    init();
+});
+
 //class to extract particles
 class Particle {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 3;
+        this.size = 3; //var that needs to scale
         this.baseX = this.x;
         this.baseY = this.y;
         this.density = (Math.random() * 40) + 5;
@@ -95,7 +99,7 @@ function connect() {
             let dy = particleArray[i].y - particleArray[j].y;
             let dist = Math.sqrt(dx * dx + dy * dy);
             //draw lines
-            if (dist < 40) {
+            if (dist < 40) { //var that needs to scale
                 let colour = 'white';
                 if (particleArray[i].mouseContact == true || particleArray[j].mouseContact == true) {
                     colour = 'red';
@@ -126,7 +130,7 @@ function init() {
             }
         }
     }
+    animate();
 }
 
 init();
-animate();
