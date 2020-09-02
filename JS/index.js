@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let particleArray = [];
+let adjustX = 12;
+let adjustY = 10;
 
 //mouse controle
 let mouse = {
@@ -77,14 +79,23 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
+ctx.fillStyle = 'white';
+ctx.font = '20px Verana';
+ctx.fillText('Hello World!', 0, 30);
+const TextCoordinates = ctx.getImageData(0, 0, 120, 30);
+
 function init() {
     particleArray = [];
-    for (let i = 0; i < 750; i++) {
-        particleArray.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+    for (let y = 0, y2 = TextCoordinates.height; y < y2; y++) {
+        for (let x = 0, x2 = TextCoordinates.width; x < x2; x++) {
+            if (TextCoordinates.data[(y * 4 * TextCoordinates.width) + (x * 4) + 3] > 128) {
+                let posX = x + adjustX;
+                let posY = y + adjustY;
+                particleArray.push(new Particle(posX * 15, posY * 15));
+            }
+        }
     }
 }
 
 init();
 animate();
-
-console.log(particleArray);
