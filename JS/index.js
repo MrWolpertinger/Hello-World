@@ -14,7 +14,11 @@ let mouse = {
 window.addEventListener('mousemove', function(event) {
     mouse.x = event.x;
     mouse.y = event.y;
-    //    console.log(mouse.x, mouse.y);
+});
+
+window.addEventListener('mouseout', function() {
+    mouse.x = undefined;
+    mouse.y = undefined;
 });
 
 //class to extract particles
@@ -25,7 +29,7 @@ class Particle {
         this.size = 3;
         this.baseX = this.x;
         this.baseY = this.y;
-        this.density = (Math.random() * 30) + 1;
+        this.density = (Math.random() * 40) + 5;
     }
     draw(color = 'red') {
         ctx.fillStyle = color;
@@ -38,10 +42,28 @@ class Particle {
         let dx = mouse.x - this.x;
         let dy = mouse.y - this.y;
         let dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-            this.size = 10;
+        let FDistX = dx / dist;
+        let FDistY = dy / dist;
+        let force = (mouse.rad - dist) / mouse.rad;
+        let dirX = FDistX * force * this.density;
+        let dirY = FDistY * force * this.density;
+
+        if (dist < mouse.rad) {
+            if (this.x - this.size > 0 && this.x + this.size < canvas.width) {
+                this.x -= dirX;
+            }
+            if (this.y - this.size > 0 && this.y + this.size < canvas.height) {
+                this.y -= dirY;
+            }
         } else {
-            this.size = 3;
+            if (this.x != this.baseX) {
+                let dx = this.x - this.baseX;
+                this.x -= dx / 15;
+            }
+            if (this.y != this.baseY) {
+                let dy = this.y - this.baseY;
+                this.y -= dy / 15;
+            }
         }
     }
 }
