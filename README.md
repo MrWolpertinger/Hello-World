@@ -1,2 +1,2 @@
 # Hello-World
-a Twist on every starting tradition
+a Twist on every starting tradition.
