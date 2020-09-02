@@ -6,8 +6,8 @@ let particleArray = [];
 
 //mouse controle
 let mouse = {
-    x: null,
-    y: null,
+    x: undefined,
+    y: undefined,
     rad: 150
 }
 
@@ -16,11 +16,6 @@ window.addEventListener('mousemove', function(event) {
     mouse.y = event.y;
     //    console.log(mouse.x, mouse.y);
 });
-
-//ctx.fillStyle = 'white';
-//ctx.font = '30px Verdana';
-//ctx.fillText('AAA', canvas.width / 2, canvas.height / 2);
-//const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
 //class to extract particles
 class Particle {
@@ -32,18 +27,42 @@ class Particle {
         this.baseY = this.y;
         this.density = (Math.random() * 30) + 1;
     }
-    draw() {
-        ctx.fillStyle = 'white';
+    draw(color = 'red') {
+        ctx.fillStyle = color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.fill();
     }
+    update() {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 200) {
+            this.size = 10;
+        } else {
+            this.size = 3;
+        }
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particleArray.length; i++) {
+        particleArray[i].update();
+        particleArray[i].draw();
+    }
+    requestAnimationFrame(animate);
 }
 
 function init() {
     particleArray = [];
-    particleArray.push(new Particle(50, 50));
+    for (let i = 0; i < 750; i++) {
+        particleArray.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+    }
 }
+
 init();
+animate();
+
 console.log(particleArray);
